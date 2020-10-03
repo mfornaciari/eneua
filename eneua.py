@@ -1,6 +1,6 @@
 import string
 
-texto = open('Anais-III-ENEUA.txt').read().lower()
+texto = open('anais1.txt', encoding='utf-8').read().lower()
 for c in string.punctuation:
     texto = texto.replace(c, ' ')
 
