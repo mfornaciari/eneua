@@ -1,26 +1,35 @@
-import string
+from string import punctuation
+from text_cleaner import text_cleaner
 
-texto = open('anais1.txt', encoding='utf-8').read().lower()
-ignore = open('ignore.txt', encoding='utf-8').read().lower()
-for c in string.punctuation:
-    texto = texto.replace(c, ' ')
+with open('anais1.txt', encoding='utf-8') as f, open('ignore.txt', encoding='utf-8') as f2:
+    text = f.readlines() # Texto, dividido em lista de linhas
+    ignore = f2.read().lower() # Lista de termos a ignorar, em minúsculas
 
-palavras = texto.split()
+text = text_cleaner(text) # Texto limpo, dividido em lista de linhas
+words = [] # lista de palavras no texto
 
-wc = {}
-for p in palavras:
-    if p in ignore:
-        wc[p] = 0
-    if p in wc:
-        wc[p] += 1
-    else:
-        wc[p] = 1
+for line in text: # Executa operações em cada linha do texto
+    for char in punctuation: # Remove pontuação
+        line = line.replace(char, ' ')
+    line = line.lower() # Transforma linha em minúsculas
+    line = line.split() # Divide linha em palavras
 
-##def contador(dupla):
-##    return dupla[1]
+    for word in line:
+        if word in ignore or len(word) == 1: # Ignora palavras na lista de ignoradas ou letras avulsas
+            continue
+        words.append(word) # Adiciona palavra à lista de palavras
 
-duplas = sorted(wc.items(),
-                key=lambda dupla:dupla[1],
+wordcount = {} # Dicionário de contagem de palavras
+
+for word in words:
+    if word not in wordcount: # Cria chave para palavra ausente no dicionário, com valor de 1
+        wordcount[word] = 1
+        continue
+    wordcount[word] += 1 # Soma 1 ao valor da chave da palavra no dicionário
+
+pairs = sorted(wordcount.items(),
+                key=lambda pair:pair[1],
                 reverse=True)
-for dupla in duplas[:20]:
-    print (dupla[0], dupla[1])
+
+for pair in pairs[:20]:
+    print(pair[0], pair[1])
