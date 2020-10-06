@@ -10,11 +10,11 @@ def text_cleaner(file_name):
         if line.startswith('\n'): # Pula linha em branco
             continue
         
-        if file_name == 'anais6':
+        if file_name == 'anais_6':
             if line.startswith('Anais d'): # Pula única linha da marca d'água
                 continue
 
-        elif file_name in ('anais1', 'anais4'):
+        elif file_name in ('anais_1', 'anais_4'):
             if line.startswith('Anais'): # Pula primeira linha da marca d'água
                 skip = True
                 continue
@@ -22,7 +22,7 @@ def text_cleaner(file_name):
                 skip = False
                 continue
         
-        elif file_name in ('anais2', 'anais3'):
+        elif file_name in ('anais_2', 'anais_3'):
             if line.startswith('ANAIS DO'): # Pula primeira linha da marca d'água
                 skip = True
                 skip_count += 1
