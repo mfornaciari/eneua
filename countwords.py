@@ -33,5 +33,5 @@ pairs = sorted(wordcount.items(), # Organiza lista de palavras por quantidade de
                 key=lambda pair:pair[1],
                 reverse=True)
 
-for pair in pairs[:20]: # Exibe palavras e número de ocorrências
+for pair in pairs: # Exibe palavras e número de ocorrências
     print(pair[0], pair[1])
