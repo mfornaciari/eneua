@@ -1,7 +1,7 @@
 from string import punctuation
 from docx2python import docx2python
 
-
+'''
 def text_splitter(text_list): # Divide o texto em palavras
     words = [] # Lista de palavras
     for paragraph in text_list:
@@ -41,25 +41,7 @@ def clean(word_list): # Limpa as palavras
         # Adiciona palavra limpa à lista de palavras
         clean_words.append(word)
     return clean_words            
+'''
 
-
-def extract_body(file_name): # Extrai corpo do texto
-    doc = docx2python(f'anais/{file_name}.docx')
-    body = doc.body
-    return [item for i in body for j in i for k in j for item in k if item]
-
-
-def extract_footnotes(file_name): # Extrai notas de rodapé
-    doc = docx2python(f'anais/{file_name}.docx')
-    footnotes = doc.footnotes
-    return [item for i in footnotes for j in i for k in j for item in k if item]
-
-
-body = extract_body('anais_3')
-footnotes = extract_footnotes('anais_3')
-
-with open('test.txt', mode= 'w', encoding= 'utf-8') as f:
-    for paragraph in body:
-        f.write(paragraph + '\n\n')
-    for paragraph in footnotes:
-        f.write(paragraph + '\n\n')
+def extract(section): # Extrai texto de uma seção do documento
+    return [item for i in section for j in i for k in j for item in k if item]
