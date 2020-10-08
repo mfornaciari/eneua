@@ -324,8 +324,6 @@
 'são',
 'se',
 'seguintes',
-'segunda',
-'segundo',
 'segundo',
 'seja',
 'sejam',
