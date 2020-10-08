@@ -2,12 +2,16 @@ from string import punctuation
 from docx import Document
 
 
+def open_doc(file_name): # Documento aberto
+    return Document(f'anais/{file_name}.docx')
+
+
 def extractor(file_name): # Extrai texto do arquivo, retornando lista de parágrafos
-    doc = Document(f'anais/{file_name}.docx') # Documento aberto
+    doc = open_doc(file_name)
     paras_text = [] # Lista contendo o texto de cada parágrafo identificado
+    
     for para in doc.paragraphs:
         para_text = para.text.strip() # Texto do parágrafo, sem espaços antes ou depois
-        
         if para_text: # Caso texto não esteja em branco
             paras_text.append(para_text) # Acrescenta texto à lista
     
@@ -25,7 +29,7 @@ def text_splitter(text_list): # Divide o texto em palavras
 
 def clean(word_list): # Limpa as palavras
     with open('ignore.txt', encoding='utf-8') as file_1:
-        ignore = file_1.read().lower() # Lista de palavras a ignorar
+        ignore = file_1.read() # Lista de palavras a ignorar
     
     clean_words = [] # Lista de palavras limpas
     for word in word_list:
@@ -53,4 +57,3 @@ def clean(word_list): # Limpa as palavras
         # Adiciona palavra limpa à lista de palavras
         clean_words.append(word)
     return clean_words            
-        

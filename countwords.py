@@ -7,8 +7,8 @@ def countwords(word_list): # Conta palavras, retornando dicionário organizado p
             continue
         wordcount[word] += 1 # Soma 1 ao valor da chave da palavra no dicionário
 
-    pairs = sorted(wordcount.items(), # Organiza lista de palavras por quantidade de ocorrências
-                    key=lambda pair:pair[1],
-                    reverse=True)
+    wordcount = sorted(wordcount.items(), # Organiza lista de palavras por quantidade de ocorrências
+                    key= lambda pair: pair[1],
+                    reverse= True)
 
-    return pairs
+    return wordcount
