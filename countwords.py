@@ -1,4 +1,4 @@
-def countwords(word_list): # Conta palavras, retornando dicionário organizado por no. de ocorrências
+def countwords(word_list): # Conta palavras, retornando lista organizada por no. de ocorrências
     wordcount = {} # Dicionário de contagem de palavras
 
     for word in word_list:
@@ -7,7 +7,8 @@ def countwords(word_list): # Conta palavras, retornando dicionário organizado p
             continue
         wordcount[word] += 1 # Soma 1 ao valor da chave da palavra no dicionário
 
-    wordcount = sorted(wordcount.items(), # Organiza lista de palavras por quantidade de ocorrências
+    # Organiza lista de palavras por quantidade de ocorrências; retorna lista de tuplas
+    wordcount = sorted(wordcount.items(), 
                     key= lambda pair: pair[1],
                     reverse= True)
 

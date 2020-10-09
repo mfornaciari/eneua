@@ -1,26 +1,39 @@
-from docx2python import docx2python
 import docx_tools as dtools
 from countwords import countwords
 
 
-file_name = input('Digite o nome do arquivo sem a extensão .docx: ') # Nome do arquivo
-doc = docx2python(f'anais/{file_name}.docx') # Documento aberto
+file_number = input('Digite o número dos anais: ') # Nome do arquivo
+body = (article for article in dtools.extract(file_number)) # Artigos como listas de palavras
+counted_articles = {} # Dicionário contendo listas de palavras contadas
+total = {} # Dicionário contendo total de ocorrências em todo o arquivo
 
-body = dtools.extract(doc.body) # Corpo do texto
-footnotes = dtools.extract(doc.footnotes) # Notas de rodapé
+# Lista de artigos, contendo lista de palavras e no. de ocorrências para cada artigo
+counted_articles = [countwords(article) for article in body]
 
-with open('test.txt', mode= 'w', encoding= 'utf-8') as f: # Teste
-    for paragraph in body: # Escreve parágrafos do corpo no .txt
-        f.write(paragraph + '\n\n')
-    for paragraph in footnotes: # Escreve parágrafos das notas no .txt
-        f.write(paragraph + '\n\n')
+with open('wordcount.txt', mode= 'w', encoding='utf-8') as output: # Cria .txt
+    idx = 1
 
-'''
-text = dtools.extractor(file_name) # Lista de texto dos parágrafos identificados
-words = dtools.text_splitter(text) # Lista (suja) de palavras
-words = dtools.clean(words) # Lista (limpa) de palavras
-counted_words = countwords(words) # Dicionário de palavras organizado por número de ocorrências
+    for article in counted_articles:
+        if idx != 1: # Pula elementos pré-textuais
+            output.write(f'\nARTIGO {idx - 1}:\n') # Escreve número do artigo no .txt     
+    
+            for pair in article:
+                output.write(f'{pair[0]}: {pair[1]}\n') # Escreve par "palavra: quantidade" no .txt
 
-for pair in counted_words[:50]: # Teste
-    print(f'{pair[0]}: {pair[1]}')
-'''
+                # Atualiza contagem total
+                if pair[0] not in total:
+                    total[pair[0]] = pair[1]
+                else:
+                    total[pair[0]] += pair[1]
+
+        idx += 1
+    
+    # Organiza total por quantidade de palavras
+    total = sorted(total.items(), 
+                    key= lambda pair: pair[1],
+                    reverse= True)
+
+    # Escreve contagem total no .txt
+    output.write(f'\nTOTAL:\n')
+    for pair in total:
+        output.write(f'{pair[0]}: {pair[1]}\n')
