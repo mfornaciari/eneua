@@ -94,7 +94,7 @@ def clean(word): # Limpa palavras
 
 def extract(number): # Extrai texto de uma seção do documento
     
-    doc = docx2python(f'anais/anais_{number}.docx') # Documento aberto
+    doc = docx2python(f'Anais/anais_{number}.docx') # Documento aberto
     # Dicionário contendo pares onde chave = título do artigo e valor = número de ocorrências no texto
     titles = {title: 0 for title in article_titles[number]}
     article = [] # Artigo completo como lista de palavras
