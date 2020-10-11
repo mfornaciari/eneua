@@ -35,5 +35,5 @@ with open('wordcount.txt', mode= 'w', encoding='utf-8') as output: # Cria .txt
 
     # Escreve contagem total no .txt
     output.write(f'\nTOTAL:\n')
-    for pair in total:
+    for pair in total[:20]:
         output.write(f'{pair[0]}: {pair[1]}\n')
