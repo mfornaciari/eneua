@@ -127,3 +127,16 @@ def extract(number): # Extrai texto de uma seção do documento
                                 article.append(clean_word) # Adiciona palavra ao artigo
 
     yield(article) # Retorna último artigo
+
+
+def generate_txt(iterator):
+    with open('full_text.txt', mode= 'w', encoding='utf-8') as output: # Cria .txt
+        idx = 1
+
+        for article in iterator:
+            if idx > 1:
+                for word in article:
+                    output.write(f'{word} ')
+                output.write('\n\n')
+            
+            idx += 1
