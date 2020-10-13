@@ -129,14 +129,14 @@ def extract(number): # Extrai texto de uma seção do documento
     yield(article) # Retorna último artigo
 
 
-def generate_txt(iterator):
+def generate_txt(iterator): # Cria arquivo .txt a partir de iterator criado em extract()
     with open('full_text.txt', mode= 'w', encoding='utf-8') as output: # Cria .txt
         idx = 1
 
         for article in iterator:
-            if idx > 1:
-                for word in article:
+            if idx != 1: # Pula elementos pré-textuais
+
+                for word in article: # Escreve cada palavra do artigo no .txt
                     output.write(f'{word} ')
-                output.write('\n\n')
             
-            idx += 1
+            idx += 1 # Próximo artigo
