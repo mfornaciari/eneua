@@ -2,8 +2,8 @@ from string import punctuation
 from docx2python import docx2python
 
 
-with open('ignore.txt', encoding='utf-8') as file_1:
-    ignore = file_1.read() # Lista de palavras a ignorar
+with open('ignore.txt', encoding='utf-8') as ignore_file:
+    ignore = ignore_file.read().split() # Tupla de palavras a ignorar
 
 # Dicionário com os títulos dos artigos em cada edição, formato "número: tupla"
 article_titles = { 
@@ -65,19 +65,24 @@ article_titles = {
     ),
 }
 
+biblio = ( # Termos que iniciam seção de referências bibliográficas
+    'Referências bibliográficas',
+    'Referências Bibliográficas',
+    'Referências',
+    'Bibliografia',
+    'Fontes',
+)
 
 def clean(word): # Limpa palavras
     # Ignora "palavras" compostas unicamente por números ou pontuação
-    if all(char.isnumeric() or char in punctuation + '“”‘’' for char in word):
+    if all(char.isnumeric() or char in (punctuation + '“”‘’') for char in word):
         return False
 
     # Remove pontuação e números
     for char in word:
-        if char.isnumeric():
+        if char.isnumeric() or char in (punctuation + '“”‘’'):
             word = word.replace(char, '')
-        elif char in punctuation + '“”‘’':
-            word = word.replace(char, '')
-        
+ 
     # Ignora letras avulsas
     if len(word) < 2:
         return False
@@ -104,39 +109,46 @@ def extract(number): # Extrai texto de uma seção do documento
     uma série de listas aninhadas: document -> table -> row -> cell. O texto
     é encontrado no quarto nível de profundidade, daí a série de loops abaixo.
     '''
+    biblio_skip = False
     for i in doc.body:
         for j in i:
             for k in j:
                 for text in k:
                     if text: # Caso texto não esteja em branco
-
-                        for title in titles: 
+                        
+                        for title in titles:
                             if title in text.lower(): # Checa se texto = algum título
                                 titles[title] += 1 # Aumenta contagem de ocorrências do título
                                 
                                 if titles[title] == 2: # Caso seja a segunda ocorrência
                                     titles.pop(title) # Remove título da lista
-                                    yield(article) # Retorna artigo completo
-                                    article = [] # Esvazia lista para começar novo artigo 
+                                    biblio_skip = False # Volta a adicionar palavras
+
                                 break # Encerra loop de títulos
                         
-                        text = text.split() # Divide texto em palavras
-                        for word in text:
-                            clean_word = clean(word) # Limpa cada palavra do texto
-                            if clean_word: # Caso palavra não tenha sido ignorada
-                                article.append(clean_word) # Adiciona palavra ao artigo
-
-    yield(article) # Retorna último artigo
+                        if text in biblio: # Checa se texto = início de bibliografia
+                            yield(article) # Retorna o artigo completo
+                            article = [] # Reseta variável p/ próximo artigo
+                            biblio_skip = True # Pula bibliografia
+                        
+                        if not biblio_skip: # Se não estiver pulando bibliografia
+                            text = text.split() # Divide texto em palavras
+                            
+                            for word in text:
+                                clean_word = clean(word) # Limpa cada palavra do texto
+                                if clean_word: # Caso palavra não tenha sido ignorada
+                                    article.append(clean_word) # Adiciona palavra ao artigo
 
 
 def generate_txt(iterator): # Cria arquivo .txt a partir de iterator criado em extract()
-    with open('full_text.txt', mode= 'w', encoding='utf-8') as output: # Cria .txt
-        idx = 1
+    with open('full_text.txt', mode= 'w', encoding='utf-8') as full_text: # Cria .txt
+        idx = 0
 
         for article in iterator:
-            if idx != 1: # Pula elementos pré-textuais
+            idx += 1
 
-                for word in article: # Escreve cada palavra do artigo no .txt
-                    output.write(f'{word} ')
-            
-            idx += 1 # Próximo artigo
+            if idx == 1: # Pula elementos pré-textuais
+                continue
+        
+            for word in article: # Escreve cada palavra do artigo no .txt
+                full_text.write(f'{word} ')
