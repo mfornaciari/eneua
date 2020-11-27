@@ -3,7 +3,7 @@ from docx2python import docx2python
 
 
 with open('ignore.txt', encoding='utf-8') as ignore_file:
-    ignore = ignore_file.read().split() # Tupla de palavras a ignorar
+    ignore = ignore_file.read().split() # Lista de palavras a ignorar
 
 # Dicionário com os títulos dos artigos em cada edição, formato "número: tupla"
 article_titles = { 
@@ -65,13 +65,15 @@ article_titles = {
     ),
 }
 
-biblio = ( # Termos que iniciam seção de referências bibliográficas
+# Termos que iniciam seção de referências bibliográficas
+biblio = ( 
     'Referências bibliográficas',
     'Referências Bibliográficas',
     'Referências',
     'Bibliografia',
     'Fontes',
 )
+
 
 def clean(word): # Limpa palavras
     # Ignora "palavras" compostas unicamente por números ou pontuação
@@ -103,13 +105,13 @@ def extract(number): # Extrai texto de uma seção do documento
     # Dicionário contendo pares onde chave = título do artigo e valor = número de ocorrências no texto
     titles = {title: 0 for title in article_titles[number]}
     article = [] # Artigo completo como lista de palavras
+    biblio_skip = False # Flag para pular bibliografia
 
     '''
     Segundo a documentação do docx2python, os elementos são extraídos como
     uma série de listas aninhadas: document -> table -> row -> cell. O texto
     é encontrado no quarto nível de profundidade, daí a série de loops abaixo.
     '''
-    biblio_skip = False
     for i in doc.body:
         for j in i:
             for k in j:
@@ -122,14 +124,14 @@ def extract(number): # Extrai texto de uma seção do documento
                                 
                                 if titles[title] == 2: # Caso seja a segunda ocorrência
                                     titles.pop(title) # Remove título da lista
-                                    biblio_skip = False # Volta a adicionar palavras
+                                    biblio_skip = False
 
                                 break # Encerra loop de títulos
                         
                         if text in biblio: # Checa se texto = início de bibliografia
                             yield(article) # Retorna o artigo completo
                             article = [] # Reseta variável p/ próximo artigo
-                            biblio_skip = True # Pula bibliografia
+                            biblio_skip = True
                         
                         if not biblio_skip: # Se não estiver pulando bibliografia
                             text = text.split() # Divide texto em palavras

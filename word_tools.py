@@ -38,7 +38,7 @@ def generate_cloud(txt):
 
 # Cria lista de no. de ocorrências a partir de lista contada de artigos
 def generate_wordcount(article_list): 
-     with open('wordcount.txt', mode= 'w', encoding='utf-8') as wordcount: # Cria .txt
+     with open('wordcount.txt', mode='w', encoding='utf-8') as wordcount: # Cria .txt
         total = {} # Contagem total
         idx = 0 # Índice do atual artigo
         articles = {} # Dicionário de artigos
