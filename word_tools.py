@@ -43,14 +43,14 @@ def generate_cloud(txt):
 # Cria lista de no. de ocorrências a partir de lista contada de artigos
 def generate_wordcount(file_number, article_list):
     titles = article_titles[file_number] # Tupla de títulos de artigos
-    full_data = pd.DataFrame(columns=titles)
+    full_data = pd.DataFrame(columns=titles) # Tabela com títulos dos artigos como colunas
     idx = 0 # Índice do atual artigo
 
     for article in article_list: # Calculando somatório total
         article_title = titles[idx] # Título do artigo
         idx += 1
 
-        if idx > 7:
+        if idx >= len(titles): # Encerra loop após passar por todos os artigos
             break
 
         for word in article: # Para cada palavra registrada no artigo
