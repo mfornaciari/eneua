@@ -105,7 +105,7 @@ def extract(number): # Extrai texto de uma seção do documento
     # Dicionário contendo pares onde chave = título do artigo e valor = número de ocorrências no texto
     titles = {title: 0 for title in article_titles[number]}
     article = [] # Artigo completo como lista de palavras
-    biblio_skip = False # Flag para pular bibliografia
+    skip = True # Flag para pular bibliografia e elementos pré-textuais
 
     '''
     Segundo a documentação do docx2python, os elementos são extraídos como
@@ -124,16 +124,16 @@ def extract(number): # Extrai texto de uma seção do documento
                                 
                                 if titles[title] == 2: # Caso seja a segunda ocorrência
                                     titles.pop(title) # Remove título da lista
-                                    biblio_skip = False
+                                    skip = False
 
                                 break # Encerra loop de títulos
                         
                         if text in biblio: # Checa se texto = início de bibliografia
                             yield(article) # Retorna o artigo completo
                             article = [] # Reseta variável p/ próximo artigo
-                            biblio_skip = True
+                            skip = True
                         
-                        if not biblio_skip: # Se não estiver pulando bibliografia
+                        if not skip: # Se não estiver pulando biblio. ou pré-textual
                             text = text.split() # Divide texto em palavras
                             
                             for word in text:
@@ -144,13 +144,7 @@ def extract(number): # Extrai texto de uma seção do documento
 
 def generate_txt(iterator): # Cria arquivo .txt a partir de iterator criado em extract()
     with open('full_text.txt', mode= 'w', encoding='utf-8') as full_text: # Cria .txt
-        idx = 0
 
         for article in iterator:
-            idx += 1
-
-            if idx == 1: # Pula elementos pré-textuais
-                continue
-        
-            for word in article: # Escreve cada palavra do artigo no .txt
-                full_text.write(f'{word} ')
+            for word in article:
+                full_text.write(f'{word} ') # Escreve cada palavra do artigo no .txt

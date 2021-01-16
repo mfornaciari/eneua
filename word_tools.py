@@ -1,11 +1,13 @@
 import os
+import pandas as pd
 import matplotlib.pyplot as plt
 from os import path
 from wordcloud import WordCloud
+from docx_tools import article_titles
 
 
 # Conta palavras, retornando lista organizada por no. de ocorrências
-def count(word_list): 
+def count(word_list):
     wordcount = {} # Dicionário de contagem de palavras
 
     for word in word_list:
@@ -19,7 +21,9 @@ def count(word_list):
                     key= lambda pair: pair[1],
                     reverse= True)
 
-    return wordcount
+    # Remove palavras ocorrendo < 5 vezes
+    output = {word: value for word, value in wordcount if value >= 5}
+    return output
 
 
 # Cria nuvem de palavras a partir de arquivo .txt
@@ -37,52 +41,24 @@ def generate_cloud(txt):
 
 
 # Cria lista de no. de ocorrências a partir de lista contada de artigos
-def generate_wordcount(article_list): 
-     with open('wordcount.txt', mode='w', encoding='utf-8') as wordcount: # Cria .txt
-        total = {} # Contagem total
-        idx = 0 # Índice do atual artigo
-        articles = {} # Dicionário de artigos
+def generate_wordcount(file_number, article_list):
+    titles = article_titles[file_number] # Tupla de títulos de artigos
+    full_data = pd.DataFrame(columns=titles)
+    idx = 0 # Índice do atual artigo
 
-        for article in article_list: # Calculando somatório total
-            idx += 1
+    for article in article_list: # Calculando somatório total
+        article_title = titles[idx] # Título do artigo
+        idx += 1
 
-            if idx == 1: # Pula elementos pré-textuais
-                continue
-               
-            articles[idx - 1] = []
+        if idx > 7:
+            break
 
-            for pair in article: # Para cada par "palavra: quant." no artigo
-                word, value = pair[0], pair[1]
-                    
-                # Adiciona pares a entrada no dicionário se quant. >= 5
-                if value >= 5:
-                    articles[idx - 1].append(pair)
+        for word in article: # Para cada palavra registrada no artigo
+            value = article[word] # no. de ocorr. da palavra
+            full_data.loc[word, article_title] = value # Adiciona palavra e no. de ocorr. à tabela
 
-                # Atualiza contagem total
-                if word in total:
-                    total[word] += value
-                    continue
-                total[word] = value              
-        
-        # Organiza total por quantidade de palavras
-        total = sorted(total.items(), 
-                        key= lambda pair: pair[1],
-                        reverse= True)
-        
-        # Escreve contagem total no .txt
-        wordcount.write(f'TOTAL:\n\n')
-        for pair in total:
-            word, value = pair[0], pair[1]
-            if value >= 5: # Adiciona palavras que aparecem > 5x
-                wordcount.write(f'{word}: {value}\n')
-                continue
-            break # Encerra loop ao chegar numa palavra que aparece < 5x
-        
-        # Escreve contagem por artigo no .txt
-        for article_number in articles:
-            wordcount.write(f'\nARTIGO {article_number}:\n\n') # Escreve número do artigo no .txt
+    full_data.fillna(0, inplace=True) # Substitui ausência de dados por zeros
+    total = full_data.sum(axis=1) # Soma totais
+    full_data['TOTAL'] = total # Adiciona coluna 'TOTAL' à tabela
 
-            for pair in articles[article_number]:
-                word, value = pair[0], pair[1]
-                wordcount.write(f'{word}: {value}\n')
- 
+    full_data.to_excel(r'wordcount.xlsx') # Escreve tabela em arquivo .xlsx    

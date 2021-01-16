@@ -18,6 +18,6 @@ if choice.lower() == 'n':
     wt.generate_cloud('full_text')
 
 elif choice.lower() == 'l':
-    # Lista de artigos, contendo lista de palavras e no. de ocorrências para cada artigo
+    # Iterator de artigos, contendo tupla de palavras e no. de ocorrências para cada artigo
     counted_articles = (wt.count(article) for article in body)
-    wt.generate_wordcount(counted_articles)
+    wt.generate_wordcount(file_number, counted_articles)
