@@ -1,51 +1,77 @@
 import re
-from pdfminer.high_level import extract_text, extract_pages
-from pdfminer.layout import LTTextBoxHorizontal
+from pdfminer.high_level import extract_pages
+from pdfminer.layout import LAParams, LTTextBoxHorizontal
 
 
-def extract(file_path):
-    with open(file_path, 'rb') as pdf_file:
-        extracted_text = extract_text(pdf_file)
-        print('Texto extraído')
-        return extracted_text
+# Extrai págs. de .pdf. Arg.: caminho p/ arquivo
+def get_pages(file_path):
+    # Parâmetros para análise de layout. Necessário p/ extração correta de blocos de texto
+    laparams = LAParams(
+        word_margin=0.5, line_margin=1, boxes_flow=None)
+    pdf_pages = extract_pages(file_path, laparams=laparams)
+    return pdf_pages  # Retorna lista de páginas no formato LTPage
 
 
-def clean(text):
-    clean_text = re.sub(r'\n+\s+', r'\n', text)
-    clean_text = re.sub(r'\s+\n+', r'\n', clean_text)
-    clean_text = re.sub(r' +', r' ', clean_text)
-    return clean_text
+# Extrai blocos de texto. Arg.: Lista de págs.
+def get_boxes(pages):
+    pgdict = {}  # Dict com pares = núm. da pág.: blocos de texto da pág.
+    pgnum = 0  # Núm. da pág. atual
 
+    for page in pages:  # Para cada pág. na lista
+        pgnum += 1  # Aumentando o núm. da pág. atual
+        pgboxes = []  # Lista de blocos de texto na pág.
 
-def write_test(text, number):
-    with open(f'test_{number}.txt', 'w', encoding='utf-8') as txt_file:
-        txt_file.write(text)
-        print('Arquivo criado')
+        for box in page:  # Para cada bloco na pág.
 
-
-'''
-for i in range(1, 7):
-    pdf_text = extract(
-        f'C:/Users/mforn/Desktop/Projeto Eneua/eneua/anais/anais_{i}.pdf')
-    pdf_text = clean(pdf_text)
-    write_test(pdf_text, i)
-'''
-
-pdf_text = extract_pages(
-    'C:/Users/mforn/Desktop/Projeto Eneua/eneua/anais/anais_6.pdf')
-
-with open(f'test_7.txt', 'w', encoding='utf-8') as txt_file:
-    pgnum = 1
-
-    for page in pdf_text:
-        txt_file.write(f'\nPÁGINA {pgnum}\n')
-        pgnum += 1
-
-        for box in page:
-
+            # Garantindo que este bloco contém texto e não img., p. ex.
             if isinstance(box, LTTextBoxHorizontal):
-                text = box.get_text()
+                # Adicionando bloco à lista de blocos na pág.
+                pgboxes.append(box)
+        # Adicionando par núm. da pág.: lista de blocos ao dict
+        pgdict[pgnum] = pgboxes
 
-                if not re.fullmatch(r'\s+', text):
-                    txt_file.write(
-                        f'\nINÍCIO DE BLOCO\n{text}FIM DE BLOCO\n')
+    return pgdict  # Retorna dict núm. da pág.: blocos de texto na pág.
+
+
+# Extrai texto de dict. Arg: Dict (núm. da pág.: blocos da pág.)
+def get_text(pgdict):
+    textdict = {}  # Dict com pares núm. de pág.: texto
+
+    for page in pgdict:  # Para cada pág.
+        pgtext = ''  # Texto completo da pág.
+
+        for box in pgdict[page]:  # Para cada bloco de texto na pág.
+            box_text = box.get_text()  # Extraindo texto do bloco
+            # Adicionando ao texto completo da pág.
+            pgtext += f'\n{box_text}\n'
+
+        textdict[page] = pgtext  # Adicionando texto da pág. ao dict
+
+    return textdict  # Retorna dict núm. de pág.: texto da pág.
+
+
+# Execução seguida dos 3 processos. Arg: núm. do arquivo
+def full_extract(file_number):
+    pdf_pages = get_pages(
+        f'C:/Users/mforn/Desktop/Projeto Eneua/eneua/anais/anais_{file_number}.pdf')
+    boxes_dict = get_boxes(pdf_pages)
+    pages_text = get_text(boxes_dict)
+
+    return pages_text
+
+
+# Teste: Escreve o texto das págs. em um arquivo .txt
+# Args: dict (núm. da pág.: texto da pág) e núm. do arquivo
+def write_text(pages_text, file_number):
+    with open(f'test_{file_number}.txt', 'w', encoding='utf-8') as txt_file:
+
+        for page_number in pages_text:  # Para cada pág. no dict
+            text = pages_text[page_number]  # Texto da pág.
+            # Escreve o texto de cada pág. no .txt, identificando número da pág.
+            txt_file.write(f'\nPÁGINA {page_number}\n\n{text}')
+
+
+# Execução do teste
+for i in range(1, 7):  # Para cada um dos anais (1 a 6)
+    pages_text = full_extract(i)
+    write_text(pages_text, i)
