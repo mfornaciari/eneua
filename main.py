@@ -1,23 +1,14 @@
-import docx_tools as dt # Ferramentas para extrair e limpar texto
-import word_tools as wt # Ferramentas para manipular texto limpo
+import pdf_tools as pt  # Ferramentas para extrair e limpar texto
+import annals_tools as at  # Ferramentas para manipular texto limpo dos anais
 
 
-print('''
-Anais disponíveis:
-3º Eneua (Unirio, 2015)
-4º Eneua (USP, 2017)
-6º Eneua (UFF, 2019)
-''')
-file_number = input('Digite o número dos anais desejados: ') # Nome do arquivo
-body = (article for article in dt.extract(file_number)) # Artigos como listas de palavras
+annals_num = int(input('Digite o número dos anais: '))  # Edição dos anais
+pg_nums = pt.get_page_numbers()  # Nos. das págs. a extrair
+pgs_text = pt.full_extract(annals_num, pg_nums)  # Dict [no. da pág.: texto]
+pt.clean(pgs_text)  # Limpa texto de cada pág.
+words = at.count_words(pgs_text)  # Dict [palavra: no. de ocorrências]
 
-choice = input('Digite "n" para gerar nuvem ou "l" para gerar lista de palavras: ')
-if choice.lower() == 'n':
-    # Gera "full_text.txt" para uso pela função geradora da nuvem
-    dt.generate_txt(body)
-    wt.generate_cloud('full_text')
-
-elif choice.lower() == 'l':
-    # Iterator de artigos, contendo tupla de palavras e no. de ocorrências para cada artigo
-    counted_articles = (wt.count(article) for article in body)
-    wt.generate_wordcount(file_number, counted_articles)
+# TESTE: escreve [palavras: número de ocorrências] em arquivo TXT
+with open(f'test_{annals_num}.txt', 'w', encoding='utf-8') as txt_file:
+    for word in words:
+        txt_file.write(f'{word} : {words[word]}\n')
