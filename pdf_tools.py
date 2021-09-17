@@ -1,3 +1,4 @@
+import os
 import re
 from pdfminer.high_level import extract_pages
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
@@ -105,9 +106,15 @@ def clean(textdict):
 
 # Execução seguida dos 3 processos. Arg: núm. do arquivo; números das págs. a extrair
 def full_extract(file_number, numbers):
-    pdf_pages = get_pages(
-        f'C:/Users/mforn/Desktop/Projeto Eneua/eneua/anais/anais_{file_number}.pdf', numbers)
+    file_path = os.path.join(
+        annals_path, f'anais_{file_number}.pdf')  # Caminho p/ arquivo
+    pdf_pages = get_pages(file_path, numbers)
     boxes_dict = get_boxes(pdf_pages)
     pages_text = get_text(boxes_dict)
 
     return pages_text  # Dict [número da pág: texto da pág.]
+
+
+absolute_path = os.path.abspath(__file__)  # Caminho p/ módulo
+dir_path = os.path.dirname(absolute_path)  # Diretório do módulo
+annals_path = os.path.join(dir_path, 'anais')  # Diretório dos anais
