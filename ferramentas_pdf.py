@@ -1,6 +1,5 @@
 'Ferramentas para extrair texto de PDF.'
 
-from typing import Iterator
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
 from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser

@@ -13,6 +13,7 @@ def pegar_num_anais() -> int:
     try:
         numero = int(input('Digite o número dos anais (1-6): '))
         assert 0 < numero < 7
+        print('\n')
         return numero
 
     except:
@@ -77,7 +78,3 @@ Aperte ENTER sem digitar nada para extrair todas as páginas.\n''')
         return
 
     return processar_nums_pag(entrada_nums)
-
-
-if __name__ == '__main__':
-    print(pegar_nums_pag())
