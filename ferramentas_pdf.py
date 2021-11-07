@@ -1,10 +1,8 @@
 'Ferramentas para extrair texto de PDF.'
 
 from pdfminer.layout import LAParams, LTTextBoxHorizontal
-from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfparser import PDFParser
 from pdfminer.pdfdocument import PDFDocument
-from pdfminer.pdfpage import PDFPage
 from pdfminer.pdfinterp import resolve1
 from pdfminer.high_level import extract_pages
 
