@@ -5,12 +5,10 @@ import gerenciamento_entrada as ge
 
 
 # Definindo caminho relativo p/ anais
-caminho_modulo_atual = path.abspath(__file__)
-caminho_diretorio_atual = path.dirname(caminho_modulo_atual)
-caminho_diretorio_anais = path.join(caminho_diretorio_atual, 'anais')
+caminho_diretorio_atual = path.dirname(__file__)
 entrada_numero_anais = ge.pegar_num_anais()
 caminho_arquivo_anais = path.join(
-    caminho_diretorio_anais, f'anais_{entrada_numero_anais}.pdf')
+    caminho_diretorio_atual, 'anais', f'anais_{entrada_numero_anais}.pdf')
 
 # Selecionando págs.
 nums_pag = ge.pegar_nums_pag()
