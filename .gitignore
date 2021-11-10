@@ -1,2 +1,4 @@
-*.pyc
-testes.py
+/__pycache__
+/.venv
+/.vscode
+/anais
