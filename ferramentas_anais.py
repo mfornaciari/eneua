@@ -96,7 +96,7 @@ def contar(dict_texto: dict) -> list:
 def escrever_completo(dict_texto: dict, num_anais: int) -> None:
     print('Criando arquivo .txt com o texto completo...')
 
-    with open(f'txt/texto_completo_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
+    with open(f'texto_completo_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
         for pag in dict_texto:
             texto = dict_texto[pag]
             arquivo_txt.write(f'----------\nPÁGINA {pag}\n\n{texto}\n\n')
@@ -108,7 +108,7 @@ def escrever_completo(dict_texto: dict, num_anais: int) -> None:
 def escrever_contagem(contagem_organizada: list, num_anais: int) -> None:
     print('Criando arquivo .txt com a contagem de palavras...')
 
-    with open(f'txt/contagem_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
+    with open(f'contagem_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
         for item in contagem_organizada:
             arquivo_txt.write(f'{item[0]}: {item[1]}\n')
 
