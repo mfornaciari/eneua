@@ -37,8 +37,10 @@ def limpar_palavras(palavras: list) -> list:
     print('Limpando palavras...')
     palavras_limpas = []
     pontuacao = punctuation + '“”‘…–ºª'
-    lista_ignorar = open('ignore.txt', 'r', encoding='utf-8').readlines()
-    lista_ignorar = [palavra.strip('\n\r') for palavra in lista_ignorar]
+    lista_ignorar = []
+    with open('ignore.txt', 'r', encoding='utf-8') as arquivo_ignorar:
+        lista_ignorar = [palavra.strip('\n')
+                         for palavra in arquivo_ignorar.readlines()]
 
     for palavra in palavras:
         tem_digitos = any(caractere.isdigit() for caractere in palavra)
