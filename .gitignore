@@ -2,3 +2,5 @@
 /.venv
 /.vscode
 /anais
+*.txt
+!ignore.txt
