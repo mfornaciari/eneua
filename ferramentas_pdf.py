@@ -23,7 +23,8 @@ def pegar_pags(caminho_arquivo: str, numeros: list | None = None) -> tuple:
     print('Extraindo páginas...')
     # laparams: Parâmetros para análise de layout do documento.
     # Necessário p/ extração correta de blocos de texto.
-    laparams = LAParams(word_margin=0.5, line_margin=1, boxes_flow=None)
+    laparams = LAParams(char_margin=10, word_margin=0.5,
+                        line_margin=1, boxes_flow=None)
     iterator_pags = extract_pages(
         caminho_arquivo, page_numbers=numeros, laparams=laparams)
 
