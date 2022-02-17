@@ -13,14 +13,15 @@ def pegar_pags(caminho_arquivo: str, numeros: list | None = None) -> tuple:
     Retorna tupla de objetos LTPage.
     '''
 
+    # Conta número de páginas no arquivo
     with open(caminho_arquivo, 'rb') as arquivo:
         analisador = PDFParser(arquivo)
         documento = PDFDocument(analisador)
         total_paginas = resolve1(documento.catalog['Pages'])['Count'] - 1
 
-        assert not numeros or numeros and not any(
-            [numero > total_paginas for numero in numeros])
-
+    # Levanta erro se usuário inserir páginas que não estão no arquivo
+    assert not numeros or numeros and not any(
+        [numero > total_paginas for numero in numeros])
     print('Extraindo páginas...')
     # Parâmetros para análise de layout do documento
     laparams = LAParams(char_margin=10, word_margin=0.5,
