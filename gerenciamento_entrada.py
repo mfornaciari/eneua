@@ -39,17 +39,13 @@ def processar_nums_pag(entrada_nums: str) -> list:
     try:
 
         for item in entrada_nums.split(','):
-
             # Caso item seja intervalo (#-#), adiciona as págs. nele à lista
             if '-' in item:
-                item_dividido = item.split('-')
-                pag_inicial = int(item_dividido[0]) - 1
-                pag_final = int(item_dividido[-1])
-                intervalo = range(pag_inicial, pag_final)
-                lista_nums.extend([num for num in intervalo])
+                paginas = (int(pag) for pag in item.split('-'))
+                intervalo = range(paginas[0] - 1, paginas[-1])
+                lista_nums += [num for num in intervalo]
                 continue
-
-            lista_nums.append(int(item) - 1)
+            lista_nums += [int(item) - 1]
 
         return lista_nums
 
@@ -73,8 +69,4 @@ Observe a paginação DO ARQUIVO, não do sumário.
 Aperte ENTER sem digitar nada para extrair todas as páginas.\n''')
     # endregion
 
-    # Caso usuário não escolha págs., encerra (extrairá todas as págs.)
-    if not entrada_nums:
-        return
-
-    return processar_nums_pag(entrada_nums)
+    return processar_nums_pag(entrada_nums) if entrada_nums else None

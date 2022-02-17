@@ -12,23 +12,24 @@ def pegar_pags(caminho_arquivo: str, numeros: list | None = None) -> tuple:
     Extrai páginas de PDF.\n
     Retorna tupla de objetos LTPage.
     '''
+
+    # Conta número de páginas no arquivo
     with open(caminho_arquivo, 'rb') as arquivo:
         analisador = PDFParser(arquivo)
         documento = PDFDocument(analisador)
         total_paginas = resolve1(documento.catalog['Pages'])['Count'] - 1
 
-        assert not numeros or numeros and not any(
-            [numero > total_paginas for numero in numeros])
-
+    # Levanta erro se usuário inserir páginas que não estão no arquivo
+    assert not numeros or numeros and not any(
+        [numero > total_paginas for numero in numeros])
     print('Extraindo páginas...')
-    # laparams: Parâmetros para análise de layout do documento.
-    # Necessário p/ extração correta de blocos de texto.
+    # Parâmetros para análise de layout do documento
     laparams = LAParams(char_margin=10, word_margin=0.5,
                         line_margin=1, boxes_flow=None)
     iterator_pags = extract_pages(
         caminho_arquivo, page_numbers=numeros, laparams=laparams)
-
     tupla_pags = ()
+
     for numero, pagina in enumerate(iterator_pags, start=1):
         print(f"Página {numero} extraída.")
         tupla_pags += (pagina,)
@@ -46,19 +47,13 @@ def pegar_blocos_texto(tupla_pags: tuple) -> dict:
 
     print("Extraindo blocos de texto...")
     dict_blocos = {}
-    num_pag = 0
 
-    for pag in tupla_pags:
-        num_pag += 1
-        blocos_pag = []
-
-        for bloco in pag:
-            # Garantindo que este bloco contém texto e não img., p. ex.
-            if isinstance(bloco, LTTextBoxHorizontal):
-                blocos_pag.append(bloco)
-
-        dict_blocos[num_pag] = blocos_pag
-        print(f'Blocos da página {num_pag} extraídos.')
+    for num, pag in enumerate(tupla_pags):
+        # Adiciona bloco à lista se ele contiver texto e não, p. ex., imagem
+        blocos_pag = [bloco for bloco in pag if isinstance(
+            bloco, LTTextBoxHorizontal)]
+        dict_blocos[num] = blocos_pag
+        print(f'Blocos da página {num} extraídos.')
 
     print('Blocos de texto extraídos.')
     return dict_blocos
@@ -73,13 +68,8 @@ def pegar_texto(dict_blocos: dict) -> dict:
     print('Extraindo texto...')
     dict_texto = {}
 
-    for num_pag in dict_blocos:
-        texto_pag = ''
-
-        for bloco in dict_blocos[num_pag]:
-            texto_bloco = bloco.get_text()
-            texto_pag += f'\n{texto_bloco}\n'
-
+    for num_pag, blocos in dict_blocos.items():
+        texto_pag = '\n'.join([bloco.get_text() for bloco in blocos])
         dict_texto[num_pag] = texto_pag
         print(f'Texto da página {num_pag} extraído.')
 
@@ -96,5 +86,4 @@ def extrair(caminho_arquivo: str, numeros: list) -> dict:
 
     pags_ltpage = pegar_pags(caminho_arquivo, numeros)
     dict_blocos = pegar_blocos_texto(pags_ltpage)
-    texto_pags = pegar_texto(dict_blocos)
-    return texto_pags
+    return pegar_texto(dict_blocos)
