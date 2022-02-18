@@ -1,7 +1,8 @@
 import os
+import gerenciamento_entrada as ge
 import ferramentas_pdf as fp
 import ferramentas_anais as fa
-import gerenciamento_entrada as ge
+import ferramentas_nuvem as fn
 
 
 # Definindo caminho relativo p/ anais
@@ -22,9 +23,8 @@ while True:
         print('O arquivo escolhido não possui uma ou mais das páginas definidas.\n')
         continue
 
-# GContando número de ocorrências de cada palavra
+# Contando número de ocorrências de cada palavra
 contagem = fa.contar(texto_pags)
-
-# TESTE
-fa.escrever_completo(texto_pags, numero_anais)
-fa.escrever_contagem(contagem, numero_anais)
+# Gerando e exibindo nuvem de palavras
+nuvem = fn.gerar_nuvem(contagem)
+fn.exibir_nuvem(nuvem)
