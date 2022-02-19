@@ -54,36 +54,3 @@ def validar_pags(pags: str, pags_totais: int) -> list | bool:
 
     print('Páginas válidas.')
     return sorted(set(lista_final))
-
-
-# def processar_nums_pag(entrada_nums: str) -> list:
-#     '''
-#     Processa os dados inseridos em resposta à solicitação de pegar_nums_pag().\n
-#     Separa string nas vírgulas, considerando cada valor da lista gerada uma página individual ou
-#     um intervalo (#-#).\n
-#     Páginas individuais são convertidas para int e adicionadas à lista final.
-#     Intervalos são separados no hífen, considerando o primeiro valor da lista gerada a página
-#     inicial do intervalo e o último, a página final. Tais valores são convertidos para int e
-#     usados para gerar uma lista de páginas no intervalo.\n
-#     Levanta exceção ValueError se qualquer tentativa de conversão para int falhar, informando
-#     ao usuário que os dados são inválidos e chamando pegar_nums_pag novamente.\n
-#     Retorna lista de números de páginas (int).
-#     '''
-
-#     lista_nums = []
-#     try:
-
-#         for item in entrada_nums.split(','):
-#             # Caso item seja intervalo (#-#), adiciona as págs. nele à lista
-#             if '-' in item:
-#                 paginas = (int(pag) for pag in item.split('-'))
-#                 intervalo = range(paginas[0] - 1, paginas[-1])
-#                 lista_nums += [num for num in intervalo]
-#                 continue
-#             lista_nums += [int(item) - 1]
-
-#         return lista_nums
-
-#     except:
-#         print('Entrada de dados inválida.\n')
-#         return pegar_nums_pag()
