@@ -1,24 +1,21 @@
 'Ferramentas para lidar com a entrada de dados pelo usuário.'
 
 
-def pegar_num_anais() -> int:
+def validar_num_anais(numero: str) -> bool:
     ''' 
-    Solicita que usuário defina o número dos anais com os quais trabalhar.\n
+    Valida número dos anais fornecido pelo usuário.\n
     Se usuário não fornecer número inteiro, levanta ValueError.
-    Se fornecer número fora do intervalo 1-6 (anais disponíveis), levanta AssertionError.
-    Em ambos os casos, chama a si mesma novamente para refazer a solicitação.\n  
-    Retorna número dos anais (int).
+    Se fornecer número fora do intervalo 1-6 (anais disponíveis), levanta AssertionError.\n  
+    Retorna True ou False.
     '''
-
     try:
-        numero = int(input('Digite o número dos anais (1-6): '))
+        numero = int(numero)
         assert 0 < numero < 7
-        print('\n')
-        return numero
-
-    except:
-        print("Número inválido.")
-        return pegar_num_anais()
+        print('Número válido.')
+        return True
+    except(ValueError, AssertionError):
+        print('Insira um número referente a anais disponíveis (de 1 a 6).')
+        return False
 
 
 def processar_nums_pag(entrada_nums: str) -> list:
