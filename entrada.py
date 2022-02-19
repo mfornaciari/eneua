@@ -4,18 +4,11 @@
 def validar_num_anais(numero: str) -> bool:
     ''' 
     Valida número dos anais fornecido pelo usuário.\n
-    Se usuário não fornecer número inteiro, levanta ValueError.
-    Se fornecer número fora do intervalo 1-6 (anais disponíveis), levanta AssertionError.\n  
-    Retorna True ou False.
+    Se número estiver no intervalo 1-6 (anais disponíveis), retorna True;
+    caso contrário, False.
     '''
-    try:
-        numero = int(numero)
-        assert 0 < numero < 7
-        print('Número válido.')
-        return True
-    except(ValueError, AssertionError):
-        print('Insira um número referente a anais disponíveis (de 1 a 6).')
-        return False
+    anais = {'1', '2', '3', '4', '5', '6'}
+    return True if numero in anais else False
 
 
 def processar_nums_pag(entrada_nums: str) -> list:
