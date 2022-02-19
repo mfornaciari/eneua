@@ -7,9 +7,12 @@ import ferramentas_nuvem as fn
 
 if __name__ == '__main__':
     # Definindo caminho relativo p/ anais
-    num_anais = input('Digite o número dos anais (1-6): ')
+    msg_anais = 'Digite o número dos anais (1-6): '
+    num_anais = input(msg_anais)
     while not entrada.validar_num_anais(num_anais):
-        num_anais = input('Digite o número dos anais (1-6): ')
+        print('Número inválido.')
+        num_anais = input(msg_anais)
+    print('Número válido.')
     diretorio_atual = os.path.dirname(__file__)
     arquivo_anais = os.path.join(
         diretorio_atual, 'anais', f'anais_{num_anais}.pdf')
