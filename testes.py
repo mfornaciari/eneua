@@ -14,7 +14,9 @@ class TestarEntrada(unittest.TestCase):
         self.assertFalse(entrada.validar_num_anais('1.2'))
 
     def test_validar_pags(self):
-        self.assertFalse(entrada.validar_pags('', self.pags_totais))
+        self.assertFalse(entrada.validar_pags(',,', self.pags_totais))
+        self.assertFalse(entrada.validar_pags('--', self.pags_totais))
+        self.assertFalse(entrada.validar_pags(',-', self.pags_totais))
         self.assertFalse(entrada.validar_pags('a', self.pags_totais))
         self.assertFalse(entrada.validar_pags(',', self.pags_totais))
         self.assertFalse(entrada.validar_pags('1-,2', self.pags_totais))
@@ -23,6 +25,7 @@ class TestarEntrada(unittest.TestCase):
         self.assertFalse(entrada.validar_pags('1,2-', self.pags_totais))
         self.assertFalse(entrada.validar_pags('12', self.pags_totais))
         self.assertFalse(entrada.validar_pags('1,2-12', self.pags_totais))
+        self.assertTrue(entrada.validar_pags('', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1,1', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1,1-2', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1', self.pags_totais))

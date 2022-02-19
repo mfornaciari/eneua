@@ -20,6 +20,10 @@ def validar_num_anais(numero: str) -> bool:
 def validar_pags(pags: str, pags_totais: int) -> list | bool:
     padrao_pagina = r'^\d+$'
     padrao_intervalo = r'^\d+\s*-\s*\d+$'
+    if not pags:
+        print('Extraindo arquivo completo.')
+        return True
+
     lista_pags = [pag.strip() for pag in pags.split(',') if pag.strip()]
     lista_final = []
     if not lista_pags:
