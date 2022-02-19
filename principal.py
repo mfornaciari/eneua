@@ -10,19 +10,32 @@ if __name__ == '__main__':
     msg_anais = 'Digite o número dos anais (1-6): '
     num_anais = input(msg_anais)
     while not entrada.validar_num_anais(num_anais):
-        print('Número inválido.')
         num_anais = input(msg_anais)
-    print('Número válido.')
     diretorio_atual = os.path.dirname(__file__)
     arquivo_anais = os.path.join(
         diretorio_atual, 'anais', f'anais_{num_anais}.pdf')
 
+    # Contando número de páginas no arquivo escolhido
+    pags_totais = fp.contar_pags(arquivo_anais)
+
+    # Definindo páginas dos anais com as quais trabalhar
+    # region
+    msg_pags = '''Digite as páginas a extrair, separadas por VÍRGULAS.
+Use HÍFENS para definir INTERVALOS. Ex.: 1,3,5-9
+Observe a paginação DO ARQUIVO, não do sumário.
+Aperte ENTER sem digitar nada para extrair todas as páginas.\n'''
+    # endregion
+    pags = input(msg_pags)
     while True:
-        # Selecionando págs. a extrair
-        nums_pag = entrada.pegar_nums_pag()
+        conjunto_pags = entrada.validar_pags(pags, pags_totais)
+        if conjunto_pags:
+            break
+
+    # Extraind páginas do arquivo
+    while True:
         try:
             # Extraindo texto
-            texto_pags = fp.extrair(arquivo_anais, nums_pag)
+            texto_pags = fp.extrair(arquivo_anais, pags)
             break
         except AssertionError:
             print('O arquivo escolhido não possui uma ou mais das páginas definidas.\n')
