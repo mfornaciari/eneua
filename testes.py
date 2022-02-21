@@ -1,5 +1,7 @@
 import unittest
+import os
 import entrada
+import ferramentas_pdf as fp
 
 
 class TestarEntrada(unittest.TestCase):
@@ -23,12 +25,13 @@ class TestarEntrada(unittest.TestCase):
         self.assertFalse(entrada.validar_pags('2-1', self.pags_totais))
         self.assertFalse(entrada.validar_pags('1-2-3', self.pags_totais))
         self.assertFalse(entrada.validar_pags('1,2-', self.pags_totais))
-        self.assertFalse(entrada.validar_pags('12', self.pags_totais))
-        self.assertFalse(entrada.validar_pags('1,2-12', self.pags_totais))
+        self.assertFalse(entrada.validar_pags('11', self.pags_totais))
+        self.assertFalse(entrada.validar_pags('1,2-11', self.pags_totais))
         self.assertTrue(entrada.validar_pags('', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1,1', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1,1-2', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1', self.pags_totais))
+        self.assertTrue(entrada.validar_pags('10', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1, ', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1,', self.pags_totais))
         self.assertTrue(entrada.validar_pags(',1', self.pags_totais))
@@ -43,6 +46,25 @@ class TestarEntrada(unittest.TestCase):
         self.assertTrue(entrada.validar_pags('1,2 -3', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1,2- 3', self.pags_totais))
         self.assertTrue(entrada.validar_pags('1, 2-3', self.pags_totais))
+
+
+class TestarFerramentasPDF(unittest.TestCase):
+    def setUp(self):
+        self.diretorio_anais = os.path.join(os.path.dirname(__file__), 'anais')
+
+    def test_contar_pags(self):
+        self.assertEqual(fp.contar_pags(os.path.join(
+            self.diretorio_anais, 'anais_1.pdf')), 543)
+        self.assertEqual(fp.contar_pags(os.path.join(
+            self.diretorio_anais, 'anais_2.pdf')), 276)
+        self.assertEqual(fp.contar_pags(os.path.join(
+            self.diretorio_anais, 'anais_3.pdf')), 245)
+        self.assertEqual(fp.contar_pags(os.path.join(
+            self.diretorio_anais, 'anais_4.pdf')), 333)
+        self.assertEqual(fp.contar_pags(os.path.join(
+            self.diretorio_anais, 'anais_5.pdf')), 223)
+        self.assertEqual(fp.contar_pags(os.path.join(
+            self.diretorio_anais, 'anais_6.pdf')), 125)
 
 
 if __name__ == '__main__':
