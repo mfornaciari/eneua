@@ -17,7 +17,7 @@ def validar_num_anais(numero: str) -> bool:
     return False
 
 
-def validar_pags(pags: str, pags_totais: int) -> list | bool:
+def validar_pags(pags: str, pags_totais: int) -> set | bool:
     padrao_pagina = r'^\d+$'
     padrao_intervalo = r'^\d+\s*-\s*\d+$'
     if not pags:
