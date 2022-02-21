@@ -1,6 +1,6 @@
 'Ferramentas para extrair texto de PDF.'
 
-from pdfminer.layout import LAParams, LTTextBoxHorizontal
+from pdfminer.layout import LAParams, LTTextBoxHorizontal, LTPage
 from pdfminer.pdfparser import PDFParser
 from pdfminer.pdfdocument import PDFDocument
 from pdfminer.pdfinterp import resolve1
@@ -14,7 +14,7 @@ def contar_pags(caminho_arquivo: str) -> int:
         return resolve1(documento.catalog['Pages'])['Count']
 
 
-def pegar_pags(caminho: str, paginas: set | None = None) -> tuple:
+def pegar_pags(caminho: str, paginas: set[int] | None = None) -> tuple[LTPage]:
     '''
     Extrai páginas de PDF.\n
     Retorna tupla de objetos LTPage.
@@ -34,21 +34,20 @@ def pegar_pags(caminho: str, paginas: set | None = None) -> tuple:
     return tupla_pags
 
 
-def pegar_blocos_texto(tupla_pags: tuple) -> dict:
+def pegar_blocos(tupla_pags: tuple[LTPage]) -> dict:
     '''
     Extrai blocos de texto.\n
-    Retorna dict com pares = número da página (int):
-    lista de blocos de texto da página.
+    Retorna dict com pares = número da página (int): 
+    blocos de texto da página (tupla).
     '''
 
     print("Extraindo blocos de texto...")
     dict_blocos = {}
-
-    for num, pag in enumerate(tupla_pags):
+    for num, pag in enumerate(tupla_pags, start=1):
         # Adiciona bloco à lista se ele contiver texto e não, p. ex., imagem
-        blocos_pag = [bloco for bloco in pag if isinstance(
-            bloco, LTTextBoxHorizontal)]
-        dict_blocos[num] = blocos_pag
+        blocos = tuple((bloco for bloco in pag if isinstance(
+            bloco, LTTextBoxHorizontal)))
+        dict_blocos[num] = blocos
         print(f'Blocos da página {num} extraídos.')
 
     print('Blocos de texto extraídos.')
@@ -81,5 +80,5 @@ def extrair(caminho_arquivo: str, numeros: list) -> dict:
     '''
 
     pags_ltpage = pegar_pags(caminho_arquivo, numeros)
-    dict_blocos = pegar_blocos_texto(pags_ltpage)
+    dict_blocos = pegar_blocos(pags_ltpage)
     return pegar_texto(dict_blocos)
