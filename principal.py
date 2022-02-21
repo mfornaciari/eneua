@@ -31,18 +31,12 @@ Aperte ENTER sem digitar nada para extrair todas as páginas.\n'''
         if conjunto_pags:
             break
 
-    # Extraind páginas do arquivo
-    while True:
-        try:
-            # Extraindo texto
-            texto_pags = fp.extrair(arquivo_anais, pags)
-            break
-        except AssertionError:
-            print('O arquivo escolhido não possui uma ou mais das páginas definidas.\n')
-            continue
+    # Extraindo páginas do arquivo
+    texto_pags = fp.extrair(arquivo_anais, conjunto_pags)
 
     # Contando número de ocorrências de cada palavra
     contagem = fa.contar(texto_pags)
-    # entradarando e exibindo nuvem de palavras
+
+    # Gerando e exibindo nuvem de palavras
     nuvem = fn.gerar_nuvem(contagem)
     fn.exibir_nuvem(nuvem)

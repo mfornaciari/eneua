@@ -7,27 +7,25 @@ from pdfminer.pdfinterp import resolve1
 from pdfminer.high_level import extract_pages
 
 
-def pegar_pags(caminho_arquivo: str, numeros: list | None = None) -> tuple:
+def contar_pags(caminho_arquivo: str) -> int:
+    with open(caminho_arquivo, 'rb') as arquivo:
+        analisador = PDFParser(arquivo)
+        documento = PDFDocument(analisador)
+        return resolve1(documento.catalog['Pages'])['Count']
+
+
+def pegar_pags(caminho_arquivo: str, paginas: set | None = None) -> tuple:
     '''
     Extrai páginas de PDF.\n
     Retorna tupla de objetos LTPage.
     '''
 
-    # Conta número de páginas no arquivo
-    with open(caminho_arquivo, 'rb') as arquivo:
-        analisador = PDFParser(arquivo)
-        documento = PDFDocument(analisador)
-        total_paginas = resolve1(documento.catalog['Pages'])['Count'] - 1
-
-    # Levanta erro se usuário inserir páginas que não estão no arquivo
-    assert not numeros or numeros and not any(
-        [numero > total_paginas for numero in numeros])
     print('Extraindo páginas...')
     # Parâmetros para análise de layout do documento
     laparams = LAParams(char_margin=10, word_margin=0.5,
                         line_margin=1, boxes_flow=None)
     iterator_pags = extract_pages(
-        caminho_arquivo, page_numbers=numeros, laparams=laparams)
+        caminho_arquivo, page_numbers=paginas, laparams=laparams)
     tupla_pags = ()
 
     for numero, pagina in enumerate(iterator_pags, start=1):
