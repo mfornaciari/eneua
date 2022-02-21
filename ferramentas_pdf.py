@@ -14,7 +14,7 @@ def contar_pags(caminho_arquivo: str) -> int:
         return resolve1(documento.catalog['Pages'])['Count']
 
 
-def pegar_pags(caminho: str, paginas: set[int] | None = None) -> tuple[LTPage]:
+def pegar_pags(caminho: str, paginas: set[int] | None = None) -> tuple[LTPage, ...]:
     '''
     Extrai páginas de PDF.\n
     Retorna tupla de objetos LTPage.
@@ -34,7 +34,7 @@ def pegar_pags(caminho: str, paginas: set[int] | None = None) -> tuple[LTPage]:
     return tupla_pags
 
 
-def pegar_blocos(tupla_pags: tuple[LTPage]) -> dict:
+def pegar_blocos(tupla_pags: tuple[LTPage]) -> dict[int, tuple[LTTextBoxHorizontal, ...]]:
     '''
     Extrai blocos de texto.\n
     Retorna dict com pares = número da página (int): 
