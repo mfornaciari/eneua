@@ -51,27 +51,23 @@ class TestarEntrada(unittest.TestCase):
 class TestarFerramentasPDF(unittest.TestCase):
     def setUp(self):
         self.diretorio_anais = os.path.join(os.path.dirname(__file__), 'anais')
+        self.caminhos = {num: os.path.join(
+            self.diretorio_anais, f'anais_{num}.pdf') for num in range(1, 7)}
 
     def test_contar_pags(self):
-        self.assertEqual(fp.contar_pags(os.path.join(
-            self.diretorio_anais, 'anais_1.pdf')), 543)
-        self.assertEqual(fp.contar_pags(os.path.join(
-            self.diretorio_anais, 'anais_2.pdf')), 276)
-        self.assertEqual(fp.contar_pags(os.path.join(
-            self.diretorio_anais, 'anais_3.pdf')), 245)
-        self.assertEqual(fp.contar_pags(os.path.join(
-            self.diretorio_anais, 'anais_4.pdf')), 333)
-        self.assertEqual(fp.contar_pags(os.path.join(
-            self.diretorio_anais, 'anais_5.pdf')), 223)
-        self.assertEqual(fp.contar_pags(os.path.join(
-            self.diretorio_anais, 'anais_6.pdf')), 125)
+        self.assertEqual(fp.contar_pags(self.caminhos[1]), 543)
+        self.assertEqual(fp.contar_pags(self.caminhos[2]), 276)
+        self.assertEqual(fp.contar_pags(self.caminhos[3]), 245)
+        self.assertEqual(fp.contar_pags(self.caminhos[4]), 333)
+        self.assertEqual(fp.contar_pags(self.caminhos[5]), 223)
+        self.assertEqual(fp.contar_pags(self.caminhos[6]), 125)
 
     def test_pegar_pags(self):
-        self.caminho = os.path.join(
-            self.diretorio_anais, 'anais_6.pdf')
-        self.assertIsInstance(fp.pegar_pags(self.caminho, None), tuple)
-        self.assertEqual(len(fp.pegar_pags(self.caminho, None)), 125)
-        self.assertEqual(len(fp.pegar_pags(self.caminho, {1, 2, 5, 8, 10})), 5)
+        self.total = fp.pegar_pags(self.caminhos[6], None)
+        self.assertIsInstance(self.total, tuple)
+        self.assertEqual(len(self.total), 125)
+        self.parcial = fp.pegar_pags(self.caminhos[6], {1, 2, 5, 8, 10})
+        self.assertEqual(len(self.parcial), 5)
 
 
 if __name__ == '__main__':
