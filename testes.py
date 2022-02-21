@@ -66,6 +66,13 @@ class TestarFerramentasPDF(unittest.TestCase):
         self.assertEqual(fp.contar_pags(os.path.join(
             self.diretorio_anais, 'anais_6.pdf')), 125)
 
+    def test_pegar_pags(self):
+        self.caminho = os.path.join(
+            self.diretorio_anais, 'anais_6.pdf')
+        self.assertIsInstance(fp.pegar_pags(self.caminho, None), tuple)
+        self.assertEqual(len(fp.pegar_pags(self.caminho, None)), 125)
+        self.assertEqual(len(fp.pegar_pags(self.caminho, {1, 2, 5, 8, 10})), 5)
+
 
 if __name__ == '__main__':
     unittest.main()

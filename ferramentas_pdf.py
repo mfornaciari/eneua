@@ -14,7 +14,7 @@ def contar_pags(caminho_arquivo: str) -> int:
         return resolve1(documento.catalog['Pages'])['Count']
 
 
-def pegar_pags(caminho_arquivo: str, paginas: set | None = None) -> tuple:
+def pegar_pags(caminho: str, paginas: set | None = None) -> tuple:
     '''
     Extrai páginas de PDF.\n
     Retorna tupla de objetos LTPage.
@@ -24,13 +24,11 @@ def pegar_pags(caminho_arquivo: str, paginas: set | None = None) -> tuple:
     # Parâmetros para análise de layout do documento
     laparams = LAParams(char_margin=10, word_margin=0.5,
                         line_margin=1, boxes_flow=None)
-    iterator_pags = extract_pages(
-        caminho_arquivo, page_numbers=paginas, laparams=laparams)
+    iter_pags = extract_pages(caminho, page_numbers=paginas, laparams=laparams)
     tupla_pags = ()
-
-    for numero, pagina in enumerate(iterator_pags, start=1):
+    for numero, pagina in enumerate(iter_pags, start=1):
         print(f"Página {numero} extraída.")
-        tupla_pags += (pagina,)
+        tupla_pags += pagina,
 
     print('Páginas extraídas.')
     return tupla_pags
