@@ -56,23 +56,22 @@ class TestarEntrada(unittest.TestCase):
 
 class TestarFerramentasPDF(unittest.TestCase):
     def setUp(self):
-        self.diretorio_anais = os.path.join(os.path.dirname(__file__), 'anais')
-        self.caminhos = {num: os.path.join(
-            self.diretorio_anais, f'anais_{num}.pdf') for num in range(1, 7)}
+        dir_anais = os.path.join(os.path.dirname(__file__), 'anais')
+        self.caminhos = [os.path.join(
+            dir_anais, f'anais_{num}.pdf') for num in range(1, 7)]
+        pags_totais = (543, 276, 245, 333, 223, 125)
+        self.infos_anais = {caminho: pags for caminho,
+                            pags in zip(self.caminhos, pags_totais)}
 
     def test_contar_pags(self):
-        self.assertEqual(fp.contar_pags(self.caminhos[1]), 543)
-        self.assertEqual(fp.contar_pags(self.caminhos[2]), 276)
-        self.assertEqual(fp.contar_pags(self.caminhos[3]), 245)
-        self.assertEqual(fp.contar_pags(self.caminhos[4]), 333)
-        self.assertEqual(fp.contar_pags(self.caminhos[5]), 223)
-        self.assertEqual(fp.contar_pags(self.caminhos[6]), 125)
+        for caminho, pags in self.infos_anais.items():
+            self.assertEqual(fp.contar_pags(caminho), pags)
 
     def test_pegar_pags(self):
-        self.total = fp.pegar_pags(self.caminhos[6], None)
+        self.total = fp.pegar_pags(self.caminhos[5], None)
         self.assertIsInstance(self.total, tuple)
         self.assertEqual(len(self.total), 125)
-        self.parcial = fp.pegar_pags(self.caminhos[6], {1, 2, 5, 8, 10})
+        self.parcial = fp.pegar_pags(self.caminhos[5], {1, 2, 5, 8, 10})
         self.assertEqual(len(self.parcial), 5)
 
 
