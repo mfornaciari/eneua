@@ -72,11 +72,19 @@ class TestarFerramentasPDF(unittest.TestCase):
         total = fp.pegar_pags(self.caminhos[5], None)
         parcial = fp.pegar_pags(self.caminhos[5], {1, 2, 5, 8, 10})
         self.assertIsInstance(total, tuple)
-        self.assertIsInstance(total[0], LTPage)
+        for pag in total:
+            self.assertIsInstance(pag, LTPage)
+
         self.assertEqual(len(total), 125)
         self.assertEqual(len(parcial), 5)
 
     def test_pegar_blocos(self):
+        pass
+
+    def test_pegar_texto(self):
+        pass
+
+    def test_extrair(self):
         pass
 
 
