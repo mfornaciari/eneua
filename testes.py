@@ -1,8 +1,9 @@
+from re import S
 import unittest
 import os
 import entrada
 import ferramentas_pdf as fp
-from pdfminer.layout import LTPage
+from pdfminer.layout import LTPage, LTTextBoxHorizontal
 
 
 class TestarEntrada(unittest.TestCase):
@@ -71,15 +72,24 @@ class TestarFerramentasPDF(unittest.TestCase):
     def test_pegar_pags(self):
         total = fp.pegar_pags(self.caminhos[5], None)
         parcial = fp.pegar_pags(self.caminhos[5], {1, 2, 5, 8, 10})
+
         self.assertIsInstance(total, tuple)
         for pag in total:
             self.assertIsInstance(pag, LTPage)
-
         self.assertEqual(len(total), 125)
         self.assertEqual(len(parcial), 5)
 
     def test_pegar_blocos(self):
-        pass
+        tupla_pags = fp.pegar_pags(self.caminhos[5], {1})
+        blocos = fp.pegar_blocos(tupla_pags)
+
+        self.assertIsInstance(blocos, dict)
+        for chave, valor in blocos.items():
+            self.assertIsInstance(chave, int)
+            self.assertEqual(chave, 1)
+            self.assertIsInstance(valor, tuple)
+            for bloco in valor:
+                self.assertIsInstance(bloco, LTTextBoxHorizontal)
 
     def test_pegar_texto(self):
         pass
