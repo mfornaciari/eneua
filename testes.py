@@ -5,7 +5,9 @@ import os
 import entrada
 import ferramentas_pdf as fp
 import ferramentas_anais as fa
+import ferramentas_nuvem as fn
 from pdfminer.layout import LTPage, LTTextBoxHorizontal
+from wordcloud import WordCloud
 from string import punctuation
 
 
@@ -171,6 +173,18 @@ class TestarFerramentasAnais(unittest.TestCase):
 
     def test_escrever_contagem(self):
         self.assertTrue("contagem_6.txt" in self.arquivos)
+
+
+class TestarNuvem(unittest.TestCase):
+    def setUp(self):
+        dir_anais = os.path.join(os.path.dirname(__file__), 'anais')
+        caminho = os.path.join(dir_anais, f'anais_6.pdf')
+        texto = fp.extrair(caminho, None)
+        contagem = fa.contar(texto)
+        self.nuvem = fn.gerar_nuvem(contagem)
+
+    def test_gerar_nuvem(self):
+        self.assertIsInstance(self.nuvem, WordCloud)
 
 
 if __name__ == '__main__':
