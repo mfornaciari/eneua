@@ -117,7 +117,8 @@ class TestarFerramentasPDF(unittest.TestCase):
 
 class TestarFerramentasAnais(unittest.TestCase):
     def setUp(self):
-        dir_anais = os.path.join(os.path.dirname(__file__), 'anais')
+        self.dir_atual = os.path.dirname(__file__)
+        dir_anais = os.path.join(self.dir_atual, 'anais')
         self.caminhos = [os.path.join(
             dir_anais, f'anais_{num}.pdf') for num in range(1, 7)]
         with open('ignore.txt', 'r', encoding='utf-8') as arquivo_ignorar:
@@ -128,6 +129,10 @@ class TestarFerramentasAnais(unittest.TestCase):
         self.palavras_limpas = fa.limpar_palavras(self.palavras)
         self.contagem = fa.contar_palavras(self.palavras_limpas)
         self.resultado = fa.contar(self.dict_texto)
+        fa.escrever_completo(self.dict_texto, 6)
+        fa.escrever_contagem(self.resultado, 6)
+        self.arquivos = [
+            arquivo.name for arquivo in os.scandir(self.dir_atual)]
 
     def test_separar_palavras(self):
         self.assertIsInstance(self.palavras, list)
@@ -162,10 +167,10 @@ class TestarFerramentasAnais(unittest.TestCase):
             self.assertIsInstance(tupla[1], int)
 
     def test_escrever_completo(self):
-        pass
+        self.assertTrue("texto_completo_6.txt" in self.arquivos)
 
     def test_escrever_contagem(self):
-        pass
+        self.assertTrue("contagem_6.txt" in self.arquivos)
 
 
 if __name__ == '__main__':
