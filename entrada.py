@@ -17,12 +17,12 @@ def validar_num_anais(numero: str) -> bool:
     return False
 
 
-def validar_pags(pags: str, pags_totais: int) -> set[int] | bool:
+def validar_pags(pags: str, pags_totais: int) -> set[int] | bool | None:
     padrao_pagina = r'^\d+$'
     padrao_intervalo = r'^\d+\s*-\s*\d+$'
     if not pags:
         print('Extraindo arquivo completo.')
-        return True
+        return None
 
     lista_pags = [pag.strip() for pag in pags.split(',') if pag.strip()]
     lista_final = []

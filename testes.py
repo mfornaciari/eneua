@@ -21,7 +21,6 @@ class TestarEntrada(unittest.TestCase):
 
     def test_validar_pags(self):
         self.valores_verdadeiros = (
-            '',
             '1,1',
             '1,1-2',
             '1',
@@ -55,6 +54,7 @@ class TestarEntrada(unittest.TestCase):
             '1,2-11',
         )
 
+        self.assertIsNone(entrada.validar_pags('', 10))
         for valor in self.valores_verdadeiros:
             self.assertTrue(entrada.validar_pags(valor, 10))
         for valor in self.valores_falsos:

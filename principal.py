@@ -28,7 +28,7 @@ Aperte ENTER sem digitar nada para extrair todas as páginas.\n'''
     pags = input(msg_pags)
     while True:
         conjunto_pags = entrada.validar_pags(pags, pags_totais)
-        if conjunto_pags:
+        if conjunto_pags == True or conjunto_pags == None:
             break
 
     # Extraindo páginas do arquivo
