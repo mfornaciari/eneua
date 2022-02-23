@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
 
-def gerar_nuvem(contagem: list) -> WordCloud:
+def gerar_nuvem(contagem: list[tuple[str, int]]) -> WordCloud:
     contagem = dict(contagem)
     return WordCloud().generate_from_frequencies(contagem)
 
