@@ -4,6 +4,7 @@ import unittest
 import os
 import entrada
 import ferramentas_pdf as fp
+import ferramentas_anais as fa
 from pdfminer.layout import LTPage, LTTextBoxHorizontal
 
 
@@ -114,8 +115,17 @@ class TestarFerramentasPDF(unittest.TestCase):
 
 
 class TestarFerramentasAnais(unittest.TestCase):
+    def setUp(self):
+        dir_anais = os.path.join(os.path.dirname(__file__), 'anais')
+        self.caminhos = [os.path.join(
+            dir_anais, f'anais_{num}.pdf') for num in range(1, 7)]
+        self.dict_texto = fp.extrair(self.caminhos[5], {1})
+        self.palavras = fa.separar_palavras(self.dict_texto)
+
     def test_separar_palavras(self):
-        pass
+        self.assertIsInstance(self.palavras, list)
+        for palavra in self.palavras:
+            self.assertIsInstance(palavra, str)
 
     def test_limpar_palavras(self):
         pass
