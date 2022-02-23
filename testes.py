@@ -1,3 +1,4 @@
+from ast import Str
 from re import S
 import unittest
 import os
@@ -92,7 +93,15 @@ class TestarFerramentasPDF(unittest.TestCase):
                 self.assertIsInstance(bloco, LTTextBoxHorizontal)
 
     def test_pegar_texto(self):
-        pass
+        tupla_pags = fp.pegar_pags(self.caminhos[5], {1})
+        blocos = fp.pegar_blocos(tupla_pags)
+        texto = fp.pegar_texto(blocos)
+
+        self.assertIsInstance(texto, dict)
+        for chave, valor in texto.items():
+            self.assertIsInstance(chave, int)
+            self.assertEqual(chave, 1)
+            self.assertIsInstance(valor, str)
 
     def test_extrair(self):
         pass
