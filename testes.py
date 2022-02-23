@@ -113,5 +113,25 @@ class TestarFerramentasPDF(unittest.TestCase):
             self.assertIsInstance(valor, str)
 
 
+class TestarFerramentasAnais(unittest.TestCase):
+    def test_separar_palavras(self):
+        pass
+
+    def test_limpar_palavras(self):
+        pass
+
+    def test_contar_palavras(self):
+        pass
+
+    def test_contar(self):
+        pass
+
+    def test_escrever_completo(self):
+        pass
+
+    def test_escrever_contagem(self):
+        pass
+
+
 if __name__ == '__main__':
     unittest.main()
