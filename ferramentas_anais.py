@@ -42,17 +42,15 @@ def limpar_palavras(palavras: list[str]) -> list[str]:
     return palavras_limpas
 
 
-# Conta número de ocorrências de cada palavra.
-# Retorna lista de tuplas organizada por número decrescente de ocorrências.
-# Tupla[0] = palavra (str) e tupla[1] = número de ocorrências (int).
 def contar_palavras(palavras_limpas: list[str]) -> list[tuple[str, int]]:
+    '''
+    Conta número de ocorrências de cada palavra no texto.\n
+    Retorna lista de tuplas organizada decrescentemente por número de ocorrências.
+    Tupla[0] = palavra (str) e tupla[1] = número de ocorrências (int).
+    '''
     print('Contando palavras...')
-    contagem = {}
-
-    for palavra in palavras_limpas:
-        contagem[palavra] = contagem[palavra] + \
-            1 if palavra in contagem else 1
-
+    contagem = {palavra: palavras_limpas.count(
+        palavra) for palavra in palavras_limpas}
     print('Todas as palavras contadas.')
     return sorted(contagem.items(), key=lambda par: par[1], reverse=True)
 
