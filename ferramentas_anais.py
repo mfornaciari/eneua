@@ -6,7 +6,7 @@ from string import punctuation
 
 # Separa palavras do texto completo.
 # Retorna lista de palavras (str).
-def separar_palavras(dict_texto: dict) -> list:
+def separar_palavras(dict_texto: dict[int, str]) -> list[str]:
     print('Separando palavras...')
     palavras = [
         palavra for pag in dict_texto for palavra in dict_texto[pag].split()]
@@ -16,7 +16,7 @@ def separar_palavras(dict_texto: dict) -> list:
 
 # Limpa palavras separadas.
 # Retorna lista de palavras (str).
-def limpar_palavras(palavras: list) -> list:
+def limpar_palavras(palavras: list[str]) -> list[str]:
     print('Limpando palavras...')
     pontuacao = punctuation + '“”‘…–ºª'
     with open('ignore.txt', 'r', encoding='utf-8') as arquivo_ignorar:
@@ -40,7 +40,7 @@ def limpar_palavras(palavras: list) -> list:
 # Conta número de ocorrências de cada palavra.
 # Retorna lista de tuplas organizada por número decrescente de ocorrências.
 # Tupla[0] = palavra (str) e tupla[1] = número de ocorrências (int).
-def contar_palavras(palavras_limpas: list) -> list:
+def contar_palavras(palavras_limpas: list[str]) -> list[tuple[str, int]]:
     print('Contando palavras...')
     contagem = {}
 
@@ -53,14 +53,14 @@ def contar_palavras(palavras_limpas: list) -> list:
 
 
 # Processo completo de contagem.
-def contar(dict_texto: dict) -> list:
+def contar(dict_texto: dict[int, str]) -> list[tuple[str, int]]:
     palavras = separar_palavras(dict_texto)
     palavras_limpas = limpar_palavras(palavras)
     return contar_palavras(palavras_limpas)
 
 
 # Cria TXT com texto completo das págs. extraídas
-def escrever_completo(dict_texto: dict, num_anais: int) -> None:
+def escrever_completo(dict_texto: dict[int, str], num_anais: int) -> None:
     print('Criando arquivo .txt com o texto completo...')
 
     with open(f'texto_completo_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
@@ -72,11 +72,11 @@ def escrever_completo(dict_texto: dict, num_anais: int) -> None:
 
 
 # Cria TXT a partir de lista de tuplas (palavra, núm. de ocorrências)
-def escrever_contagem(contagem_organizada: list, num_anais: int) -> None:
+def escrever_contagem(contagem: list[tuple[str, int]], num_anais: int) -> None:
     print('Criando arquivo .txt com a contagem de palavras...')
 
     with open(f'contagem_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
-        for item in contagem_organizada:
+        for item in contagem:
             arquivo_txt.write(f'{item[0]}: {item[1]}\n')
 
     print('Arquivo criado.')
