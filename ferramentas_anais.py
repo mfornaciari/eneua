@@ -4,9 +4,11 @@ import re
 from string import punctuation
 
 
-# Separa palavras do texto completo.
-# Retorna lista de palavras (str).
 def separar_palavras(dict_texto: dict[int, str]) -> list[str]:
+    '''
+    Separa palavras do texto completo.\n
+    Retorna lista de palavras (str).
+    '''
     print('Separando palavras...')
     palavras = [
         palavra for pag in dict_texto for palavra in dict_texto[pag].split()]
