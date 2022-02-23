@@ -74,21 +74,20 @@ def escrever_completo(dict_texto: dict[int, str], num_anais: int) -> None:
     no formato "PÁGINA X".
     '''
     print('Criando arquivo .txt com o texto completo...')
-
     with open(f'texto_completo_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
         for pag in dict_texto:
             texto = dict_texto[pag]
             arquivo_txt.write(f'----------\nPÁGINA {pag}\n\n{texto}\n\n')
-
     print('Arquivo criado.')
 
 
-# Cria TXT a partir de lista de tuplas (palavra, núm. de ocorrências)
 def escrever_contagem(contagem: list[tuple[str, int]], num_anais: int) -> None:
+    '''
+    Cria arquivo .txt com a contagem do número de ocorrências de cada palavra no
+    texto a partir da lista de tuplas gerada por contar().\n
+    '''
     print('Criando arquivo .txt com a contagem de palavras...')
-
     with open(f'contagem_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
         for item in contagem:
             arquivo_txt.write(f'{item[0]}: {item[1]}\n')
-
     print('Arquivo criado.')
