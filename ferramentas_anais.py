@@ -16,9 +16,12 @@ def separar_palavras(dict_texto: dict[int, str]) -> list[str]:
     return palavras
 
 
-# Limpa palavras separadas.
-# Retorna lista de palavras (str).
 def limpar_palavras(palavras: list[str]) -> list[str]:
+    '''
+    Limpa palavras separadas, removendo pontuação, espaços em branco,
+    palavras a ignorar e números (exceto anos).\n
+    Retorna lista de palavras(str).
+    '''
     print('Limpando palavras...')
     pontuacao = punctuation + '“”‘…–ºª'
     with open('ignore.txt', 'r', encoding='utf-8') as arquivo_ignorar:
