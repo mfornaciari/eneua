@@ -55,7 +55,6 @@ def contar_palavras(palavras_limpas: list[str]) -> list[tuple[str, int]]:
     return sorted(contagem.items(), key=lambda par: par[1], reverse=True)
 
 
-# Processo completo de contagem.
 def contar(dict_texto: dict[int, str]) -> list[tuple[str, int]]:
     '''
     Processo completo de contagem de palavras no texto.\n
@@ -68,8 +67,12 @@ def contar(dict_texto: dict[int, str]) -> list[tuple[str, int]]:
     return contar_palavras(palavras_limpas)
 
 
-# Cria TXT com texto completo das págs. extraídas
 def escrever_completo(dict_texto: dict[int, str], num_anais: int) -> None:
+    '''
+    Cria arquivo .txt com texto completo das páginas extraídas.\n
+    Insere indicação do número da página no início da mesma, antes do texto,
+    no formato "PÁGINA X".
+    '''
     print('Criando arquivo .txt com o texto completo...')
 
     with open(f'texto_completo_{num_anais}.txt', 'w', encoding='utf-8') as arquivo_txt:
