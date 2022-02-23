@@ -6,6 +6,7 @@ import entrada
 import ferramentas_pdf as fp
 import ferramentas_anais as fa
 from pdfminer.layout import LTPage, LTTextBoxHorizontal
+from string import punctuation
 
 
 class TestarEntrada(unittest.TestCase):
@@ -121,6 +122,10 @@ class TestarFerramentasAnais(unittest.TestCase):
             dir_anais, f'anais_{num}.pdf') for num in range(1, 7)]
         self.dict_texto = fp.extrair(self.caminhos[5], {1})
         self.palavras = fa.separar_palavras(self.dict_texto)
+        self.palavras_limpas = fa.limpar_palavras(self.palavras)
+        with open('ignore.txt', 'r', encoding='utf-8') as arquivo_ignorar:
+            self.lista_ignorar = [palavra.strip(
+                '\n') for palavra in arquivo_ignorar.readlines()]
 
     def test_separar_palavras(self):
         self.assertIsInstance(self.palavras, list)
@@ -128,7 +133,17 @@ class TestarFerramentasAnais(unittest.TestCase):
             self.assertIsInstance(palavra, str)
 
     def test_limpar_palavras(self):
-        pass
+        self.assertIsInstance(self.palavras_limpas, list)
+        for palavra in self.palavras_limpas:
+            self.assertIsInstance(palavra, str)
+            self.assertTrue(len(palavra) > 1)
+            self.assertTrue(palavra == palavra.upper())
+            self.assertFalse(any(caractere in (punctuation + '“”‘…–ºª')
+                             for caractere in palavra))
+            self.assertFalse(' ' in palavra)
+            self.assertFalse(len(palavra) < 4 and any(
+                caractere.isnumeric() for caractere in palavra))
+            self.assertFalse(palavra in self.lista_ignorar)
 
     def test_contar_palavras(self):
         pass
