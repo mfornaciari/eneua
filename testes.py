@@ -127,6 +127,7 @@ class TestarFerramentasAnais(unittest.TestCase):
         self.palavras = fa.separar_palavras(self.dict_texto)
         self.palavras_limpas = fa.limpar_palavras(self.palavras)
         self.contagem = fa.contar_palavras(self.palavras_limpas)
+        self.resultado = fa.contar(self.dict_texto)
 
     def test_separar_palavras(self):
         self.assertIsInstance(self.palavras, list)
@@ -154,7 +155,11 @@ class TestarFerramentasAnais(unittest.TestCase):
             self.assertIsInstance(tupla[1], int)
 
     def test_contar(self):
-        pass
+        self.assertIsInstance(self.resultado, list)
+        for tupla in self.resultado:
+            self.assertIsInstance(tupla, tuple)
+            self.assertIsInstance(tupla[0], str)
+            self.assertIsInstance(tupla[1], int)
 
     def test_escrever_completo(self):
         pass
