@@ -104,7 +104,13 @@ class TestarFerramentasPDF(unittest.TestCase):
             self.assertIsInstance(valor, str)
 
     def test_extrair(self):
-        pass
+        dict_texto = fp.extrair(self.caminhos[5], {1})
+
+        self.assertIsInstance(dict_texto, dict)
+        for chave, valor in dict_texto.items():
+            self.assertIsInstance(chave, int)
+            self.assertEqual(chave, 1)
+            self.assertIsInstance(valor, str)
 
 
 if __name__ == '__main__':
