@@ -120,12 +120,13 @@ class TestarFerramentasAnais(unittest.TestCase):
         dir_anais = os.path.join(os.path.dirname(__file__), 'anais')
         self.caminhos = [os.path.join(
             dir_anais, f'anais_{num}.pdf') for num in range(1, 7)]
-        self.dict_texto = fp.extrair(self.caminhos[5], {1})
-        self.palavras = fa.separar_palavras(self.dict_texto)
-        self.palavras_limpas = fa.limpar_palavras(self.palavras)
         with open('ignore.txt', 'r', encoding='utf-8') as arquivo_ignorar:
             self.lista_ignorar = [palavra.strip(
                 '\n') for palavra in arquivo_ignorar.readlines()]
+        self.dict_texto = fp.extrair(self.caminhos[5], {1})
+        self.palavras = fa.separar_palavras(self.dict_texto)
+        self.palavras_limpas = fa.limpar_palavras(self.palavras)
+        self.contagem = fa.contar_palavras(self.palavras_limpas)
 
     def test_separar_palavras(self):
         self.assertIsInstance(self.palavras, list)
@@ -146,7 +147,11 @@ class TestarFerramentasAnais(unittest.TestCase):
             self.assertFalse(palavra in self.lista_ignorar)
 
     def test_contar_palavras(self):
-        pass
+        self.assertIsInstance(self.contagem, list)
+        for tupla in self.contagem:
+            self.assertIsInstance(tupla, tuple)
+            self.assertIsInstance(tupla[0], str)
+            self.assertIsInstance(tupla[1], int)
 
     def test_contar(self):
         pass
