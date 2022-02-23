@@ -57,6 +57,12 @@ def contar_palavras(palavras_limpas: list[str]) -> list[tuple[str, int]]:
 
 # Processo completo de contagem.
 def contar(dict_texto: dict[int, str]) -> list[tuple[str, int]]:
+    '''
+    Processo completo de contagem de palavras no texto.\n
+    Realiza separar_palavras(), limpar_palavras() e contar_palavras().\n
+    Retorna lista de tuplas.
+    Tupla[0] = palavra, tupla[1] = número de ocorrências.
+    '''
     palavras = separar_palavras(dict_texto)
     palavras_limpas = limpar_palavras(palavras)
     return contar_palavras(palavras_limpas)
