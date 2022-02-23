@@ -14,7 +14,7 @@ def contar_pags(caminho_arquivo: str) -> int:
         return resolve1(documento.catalog['Pages'])['Count']
 
 
-def pegar_pags(caminho: str, paginas: set[int] | None = None) -> tuple[LTPage, ...]:
+def pegar_pags(caminho: str, pags: set[int] | None = None) -> tuple[LTPage, ...]:
     '''
     Extrai páginas de PDF.\n
     Retorna tupla de objetos LTPage.
@@ -24,7 +24,7 @@ def pegar_pags(caminho: str, paginas: set[int] | None = None) -> tuple[LTPage, .
     # Parâmetros para análise de layout do documento
     laparams = LAParams(char_margin=10, word_margin=0.5,
                         line_margin=1, boxes_flow=None)
-    iter_pags = extract_pages(caminho, page_numbers=paginas, laparams=laparams)
+    iter_pags = extract_pages(caminho, page_numbers=pags, laparams=laparams)
     tupla_pags = ()
     for numero, pagina in enumerate(iter_pags, start=1):
         print(f"Página {numero} extraída.")
@@ -34,7 +34,7 @@ def pegar_pags(caminho: str, paginas: set[int] | None = None) -> tuple[LTPage, .
     return tupla_pags
 
 
-def pegar_blocos(tupla_pags: tuple[LTPage]) -> dict[int, tuple[LTTextBoxHorizontal, ...]]:
+def pegar_blocos(tupla_pags: tuple[LTPage, ...]) -> dict[int, tuple]:
     '''
     Extrai blocos de texto.\n
     Retorna dict com pares = número da página (int): 
@@ -54,7 +54,7 @@ def pegar_blocos(tupla_pags: tuple[LTPage]) -> dict[int, tuple[LTTextBoxHorizont
     return dict_blocos
 
 
-def pegar_texto(dict_blocos: dict) -> dict:
+def pegar_texto(dict_blocos: dict[int, tuple]) -> dict[int, str]:
     '''
     Extrai texto de blocos de texto.\n
     Retorna dict com pares = número da página (int): texto da página (str).    
@@ -62,7 +62,6 @@ def pegar_texto(dict_blocos: dict) -> dict:
 
     print('Extraindo texto...')
     dict_texto = {}
-
     for num_pag, blocos in dict_blocos.items():
         texto_pag = '\n'.join([bloco.get_text() for bloco in blocos])
         dict_texto[num_pag] = texto_pag
@@ -72,7 +71,7 @@ def pegar_texto(dict_blocos: dict) -> dict:
     return dict_texto
 
 
-def extrair(caminho_arquivo: str, numeros: list) -> dict:
+def extrair(caminho_arquivo: str, numeros: list) -> dict[int, str]:
     '''
     Processo completo de extração de texto do PDF.\n
     Realiza pegar_pags, pegar_blocos_texto e pegar_texto.\n
